@@ -371,8 +371,8 @@
   revision = "8e476cb7322e59919cbb6482fd076ec5a214df25"
 
 [[projects]]
-  branch = "openshift-4.0-cluster-api-0.0.0-alpha.4"
-  digest = "1:70aff930abe993c5b2c11128f615ac7ad529e99d82ee3fb13e41e2afac30a38c"
+  branch = "drop-cluster"
+  digest = "1:094eb37dfdc149e4b46a1f8ba2f0a01d2e14973b20ae758038ab66aef16b75ae"
   name = "github.com/openshift/cluster-api"
   packages = [
     "pkg/apis/cluster/common",
@@ -388,7 +388,8 @@
     "pkg/util",
   ]
   pruneopts = ""
-  revision = "d8958b539e331bf5ebb056b7f872541e13fb8e01"
+  revision = "63b9f317cb95dfea25c1cb1c3ab4da362ebb5d14"
+  source = "https://github.com/enxebre/cluster-api"
 
 [[projects]]
   branch = "master"

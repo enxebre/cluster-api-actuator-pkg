@@ -47,7 +47,8 @@ required = [
 
 [[constraint]]
   name = "github.com/openshift/cluster-api"
-  branch = "openshift-4.0-cluster-api-0.0.0-alpha.4"
+  source = "https://github.com/enxebre/cluster-api"
+  branch = "drop-cluster"
 
 [[constraint]]
   name = "github.com/openshift/cluster-autoscaler-operator"
