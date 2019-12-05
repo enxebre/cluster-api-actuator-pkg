@@ -30,22 +30,12 @@ const (
 	machineAPIGroup  = "machine.openshift.io"
 )
 
-func isOneMachinePerNode(client runtimeclient.Client) bool {
-	machineList := mapiv1beta1.MachineList{}
+func isOneMachinePerNode(client runtimeclient.Client, machines []*mapiv1beta1.Machine) bool {
 	nodeList := corev1.NodeList{}
 	endTime := time.Now().Add(time.Duration(e2e.WaitMedium))
 	if err := wait.PollImmediate(5*time.Second, e2e.WaitMedium, func() (bool, error) {
-		if err := client.List(context.TODO(), &machineList, runtimeclient.InNamespace(e2e.MachineAPINamespace)); err != nil {
-			glog.Errorf("Error querying api for machineList object: %v, retrying...", err)
-			return false, nil
-		}
 		if err := client.List(context.TODO(), &nodeList, runtimeclient.InNamespace(e2e.MachineAPINamespace)); err != nil {
 			glog.Errorf("Error querying api for nodeList object: %v, retrying...", err)
-			return false, nil
-		}
-
-		glog.Infof("[remaining %s] Expecting the same number of machines and nodes, have %d nodes and %d machines", remainingTime(endTime), len(nodeList.Items), len(machineList.Items))
-		if len(machineList.Items) != len(nodeList.Items) {
 			return false, nil
 		}
 
@@ -57,7 +47,8 @@ func isOneMachinePerNode(client runtimeclient.Client) bool {
 			}
 			nodeNameToMachineAnnotation[node.Name] = node.Annotations[e2e.MachineAnnotationKey]
 		}
-		for _, machine := range machineList.Items {
+
+		for _, machine := range machines {
 			if machine.Status.NodeRef == nil {
 				glog.Errorf("Machine %q has no NodeRef, retrying...", machine.Name)
 				return false, nil
@@ -265,8 +256,20 @@ func waitForClusterSizeToBeHealthy(client runtimeclient.Client, targetSize int) 
 	}
 
 	glog.Infof("waiting for each node to be backed by a machine")
-	if !isOneMachinePerNode(client) {
-		return fmt.Errorf("One machine per node condition violated")
+	machineSets, err := e2e.GetMachineSets(client)
+	if err != nil {
+		return fmt.Errorf("error getting machine sets: %v", err)
+	}
+
+	for _, machineset := range machineSets {
+		machines, err := getMachinesFromMachineSet(client, &machineset)
+		if err != nil {
+			return fmt.Errorf("error getting machines: %v", err)
+		}
+
+		if !isOneMachinePerNode(client, machines) {
+			return fmt.Errorf("One machine per node condition violated")
+		}
 	}
 
 	return nil

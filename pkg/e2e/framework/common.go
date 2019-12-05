@@ -40,10 +40,10 @@ const (
 )
 
 // RandomString returns a random 6 character string.
-func RandomString() string {
+func RandomString(clusterName string) string {
 	randID := string(uuid.NewUUID())
 
-	return randID[:6]
+	return clusterName + randID[:6]
 }
 
 // GetInfrastructure fetches the global cluster infrastructure object.
