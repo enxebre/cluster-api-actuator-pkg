@@ -332,8 +332,8 @@ var _ = Describe("[Feature:Machines] Autoscaler should", func() {
 		}).enable()
 
 		By(fmt.Sprintf("Creating ClusterAutoscaler configured with maxNodesTotal:%v", maxNodesTotal))
-		clusterAutoscaler := clusterAutoscalerResource(maxNodesTotal)
-		Expect(client.Create(context.TODO(), clusterAutoscaler)).Should(Succeed())
+		//clusterAutoscaler := clusterAutoscalerResource(maxNodesTotal)
+		//Expect(client.Create(context.TODO(), clusterAutoscaler)).Should(Succeed())
 
 		By(fmt.Sprintf("Deriving Memory capacity from machine %q", existingMachineSets[0].Name))
 		workerNodes, err := framework.GetWorkerNodes(client)
