@@ -63,8 +63,8 @@ test-e2e: ## Run openshift specific e2e test
 	# failures and flakes.
 	# Feature:Operator tests remove deployments. Thus loosing all the logs
 	# previously acquired.
-	hack/ci-integration.sh $(GINKGO_ARGS) -focus="Feature:Operators"
-	hack/ci-integration.sh $(GINKGO_ARGS) -skip="Feature:Operators|Autoscaler"
+	#hack/ci-integration.sh $(GINKGO_ARGS) -focus="Feature:Operators"
+	#hack/ci-integration.sh $(GINKGO_ARGS) -skip="Feature:Operators|Autoscaler"
 	# TODO: parallelise autoscaler
 	hack/ci-integration.sh $(GINKGO_ARGS) -focus="Autoscaler"
 
